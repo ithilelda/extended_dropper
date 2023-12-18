@@ -1,5 +1,5 @@
-# Fabric Mod Template
+# Extended Dropper
 
 ## Features
 
-- 1.19 upward universal jar for simple mods.
+- Dropper can now emulate left clicking the facing block with tools in its inventory.
