@@ -21,9 +21,9 @@ public class DropperBlockMixin {
 	@WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/block/dispenser/DispenserBehavior;dispense(Lnet/minecraft/util/math/BlockPointer;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"), method = "dispense")
 	private ItemStack dispenseWithToolUsage(DispenserBehavior instance, BlockPointer blockPointer, ItemStack itemStack, Operation<ItemStack> original) {
 		// we only perform actions if we have chosen a valid tool.
-		ServerWorld world = blockPointer.world();
-		Direction direction = blockPointer.state().get(DispenserBlock.FACING);
-		BlockPos facingPos = blockPointer.pos().offset(direction);
+		ServerWorld world = blockPointer.getWorld();
+		Direction direction = blockPointer.getBlockState().get(DispenserBlock.FACING);
+		BlockPos facingPos = blockPointer.getPos().offset(direction);
 		BlockState breakingBlockState = world.getBlockState(facingPos);
 		if (itemStack.isSuitableFor(breakingBlockState)) {
 			Block breakingBlock = breakingBlockState.getBlock();
