@@ -8,6 +8,7 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.DropperBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import top.ithilelda.ExtendedDropper;
+import top.ithilelda.utils.DropperActions;
 
 @Mixin(DropperBlock.class)
 public class DropperBlockMixin {
@@ -25,19 +28,16 @@ public class DropperBlockMixin {
 		Direction direction = blockPointer.getBlockState().get(DispenserBlock.FACING);
 		BlockPos facingPos = blockPointer.getPos().offset(direction);
 		BlockState breakingBlockState = world.getBlockState(facingPos);
-		if (itemStack.isSuitableFor(breakingBlockState)) {
-			Block breakingBlock = breakingBlockState.getBlock();
-			// usually we call onBreak, but the player is null, so we do not spawn particles nor trigger piglins, just emit events.
-			world.emitGameEvent(GameEvent.BLOCK_DESTROY, facingPos, GameEvent.Emitter.of(null, breakingBlockState));
-			boolean bl = world.removeBlock(facingPos, false);
-			if (bl) {
-				breakingBlock.onBroken(world, facingPos, breakingBlockState);
-				Block.dropStacks(breakingBlockState, world, facingPos, world.getBlockEntity(facingPos), null, itemStack);
+		if (itemStack.getItem() instanceof ToolItem) {
+			// if there is a block in front and we have the suitable tool, we try to use the tool to break it.
+			if (!breakingBlockState.isAir() && itemStack.isSuitableFor(breakingBlockState)) {
+				DropperActions.BreakBlockWithTool(world, breakingBlockState, facingPos, itemStack);
 			}
-			boolean toolBroken = itemStack.damage(1, world.random, null);
-			if (toolBroken) {
-				itemStack.setCount(0);
+			// If there is no block in front and we have a tool item, we will try to attack entities within that block.
+			else if (breakingBlockState.isAir()) {
+				DropperActions.AttackEntityWithTool(world, facingPos, itemStack);
 			}
+			// otherwise, we do nothing. (note that tool items will never be dropped by dropper now).
 			return itemStack;
 		}
 		// otherwise we just continue with the original method.
