@@ -31,13 +31,13 @@ public class DropperActions {
             tool.setCount(0);
         }
     }
-    public static void AttackEntityWithSword(ServerWorld world, BlockPos pos, ItemStack sword) {
-        List<Entity> entities = world.getOtherEntities(null, new Box(pos));
+    public static void AttackEntityWithSword(ServerWorld world, BlockPos targetPos, BlockPos dropperPos, ItemStack sword) {
+        List<Entity> entities = world.getOtherEntities(null, new Box(targetPos));
         for (Entity entity : entities) {
             if (entity instanceof LivingEntity target) {
                 float swordDamage = sword.isEmpty() ? 0.0f : ((SwordItem)sword.getItem()).getAttackDamage();
                 swordDamage += EnchantmentHelper.getAttackDamage(sword, target.getGroup());
-                DamageSource source = new DamageSource(world.getDamageSources().registry.entryOf(DamageTypes.GENERIC), pos.toCenterPos());
+                DamageSource source = new DamageSource(world.getDamageSources().registry.entryOf(DamageTypes.GENERIC), dropperPos.toCenterPos());
                 target.damage(source, swordDamage);
                 if (sword.damage(1, world.random, null)) {
                     sword.setCount(0);

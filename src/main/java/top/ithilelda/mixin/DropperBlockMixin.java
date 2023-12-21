@@ -34,7 +34,7 @@ public class DropperBlockMixin {
 			}
 			// If we've got a weapon, we try to swing it.
 			else if (itemStack.getItem() instanceof SwordItem) {
-				DropperActions.AttackEntityWithSword(world, facingPos, itemStack);
+				DropperActions.AttackEntityWithSword(world, facingPos, blockPointer.getPos(), itemStack);
 			}
 			// otherwise, we do nothing. (note that tool items will never be dropped by dropper now).
 			return itemStack;
