@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -20,7 +21,11 @@ import top.ithilelda.ExtendedDropper;
 import java.util.List;
 
 public class DropperActions {
+    public static boolean toolShouldBreakBlock(ItemStack tool, BlockState blockState) {
+        return tool.isSuitableFor(blockState) && !blockState.isIn(BlockTags.SAPLINGS);
+    }
     public static void BreakBlockWithTool(ServerWorld world, BlockState blockState, BlockPos pos, ItemStack tool) {
+        if (!toolShouldBreakBlock(tool, blockState)) return;
         world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(null, blockState));
         Block breakingBlock = blockState.getBlock();
         if (world.removeBlock(pos, false)) {

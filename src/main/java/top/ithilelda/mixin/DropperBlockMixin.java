@@ -29,7 +29,7 @@ public class DropperBlockMixin {
 			BlockPos facingPos = blockPointer.getPos().offset(direction);
 			BlockState breakingBlockState = world.getBlockState(facingPos);
 			// if there is a block in front and we have the suitable mining tool, we try to use the tool to break it.
-			if (!breakingBlockState.isAir() && itemStack.getItem() instanceof MiningToolItem && itemStack.isSuitableFor(breakingBlockState)) {
+			if (!breakingBlockState.isAir() && itemStack.getItem() instanceof MiningToolItem) {
 				DropperActions.BreakBlockWithTool(world, breakingBlockState, facingPos, itemStack);
 			}
 			// If we've got a weapon, we try to swing it.
