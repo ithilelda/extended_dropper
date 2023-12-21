@@ -8,15 +8,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolItem;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.event.GameEvent;
-import top.ithilelda.ExtendedDropper;
 
 import java.util.List;
 
@@ -44,9 +41,7 @@ public class DropperActions {
                 swordDamage += EnchantmentHelper.getAttackDamage(sword, target.getGroup());
                 DamageSource source = new DamageSource(world.getDamageSources().registry.entryOf(DamageTypes.GENERIC), dropperPos.toCenterPos());
                 target.damage(source, swordDamage);
-                if (sword.damage(1, world.random, null)) {
-                    sword.setCount(0);
-                }
+                if (sword.damage(1, world.random, null)) sword.setCount(0);
             }
         }
     }

@@ -39,7 +39,7 @@ public abstract class LivingEntityMixin {
                 for (int i = 0; i < DropperBlockEntity.INVENTORY_SIZE; i++) {
                     int stackLootingLevel = EnchantmentHelper.getLevel(Enchantments.LOOTING, dbe.getStack(i));
                     ExtendedDropper.LOGGER.debug("dropper kill! current stack looting level: " + stackLootingLevel);
-                    if (stackLootingLevel > result) result = stackLootingLevel;
+                    result += stackLootingLevel;
                 }
             }
         }
