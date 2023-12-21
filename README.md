@@ -12,4 +12,4 @@
   - Dropper respects vanilla enchantments when breaking blocks.
 - If a weapon is selected, dropper will try to kill mobs in front of it.
   - Will not drop experience if used alone.
-  - Does not respect looting related enchantments, because they require a deeper emulation of player action.
+  - starting 1.1.0, dropper also respects looting enchantments. I implemented a workaround so I don't need to emulate player actions.

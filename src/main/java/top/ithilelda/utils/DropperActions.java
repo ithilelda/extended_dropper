@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.SwordItem;
@@ -35,7 +37,8 @@ public class DropperActions {
             if (entity instanceof LivingEntity target) {
                 float swordDamage = sword.isEmpty() ? 0.0f : ((SwordItem)sword.getItem()).getAttackDamage();
                 swordDamage += EnchantmentHelper.getAttackDamage(sword, target.getGroup());
-                target.damage(world.getDamageSources().generic(), swordDamage);
+                DamageSource source = new DamageSource(world.getDamageSources().registry.entryOf(DamageTypes.GENERIC), pos.toCenterPos());
+                target.damage(source, swordDamage);
                 if (sword.damage(1, world.random, null)) {
                     sword.setCount(0);
                 }
