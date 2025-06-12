@@ -1,2 +1,5 @@
 - 1.0.0
   - initial release.
+- 1.1.0
+  - update to 1.21.5.
+  - most vanilla enchantments work.
