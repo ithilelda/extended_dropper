@@ -27,6 +27,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import top.ithilelda.ExtendedDropper;
 
@@ -49,7 +50,7 @@ public class DropperBlockMixin {
 				blockState.getBlock().onBroken(world, facingPos, blockState);
 				Block.dropStacks(blockState, world, facingPos, world.getBlockEntity(facingPos), null, itemStack);
 			}
-			itemStack.damage(itemDamage, world, null, null);
+			itemStack.damage(itemDamage, world, null, item -> {});
 			return itemStack;
 		// If we've got a weapon, we try to swing it.
 		} else if (itemStack.get(DataComponentTypes.WEAPON) != null) {
@@ -63,8 +64,8 @@ public class DropperBlockMixin {
 						DamageSource source = world.getDamageSources().generic();
 						float trueDamage = EnchantmentHelper.getDamage(world, itemStack, target, source, baseDamage);
 						target.damage(world, source, trueDamage);
-						itemStack.damage(itemDamage, world, null, null);
-						EnchantmentHelper.onTargetDamaged(world, target, source, itemStack, Item::getName);
+						itemStack.damage(itemDamage, world, null, item -> {});
+						EnchantmentHelper.onTargetDamaged(world, target, source, itemStack);
 					}
 					break;
 				}
